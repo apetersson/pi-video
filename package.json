@@ -1,0 +1,42 @@
+{
+  "name": "pi-video",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Native video input for pi using the selected model and advertised capabilities",
+  "pi": {
+    "extensions": [
+      "./index.ts"
+    ]
+  },
+  "scripts": {
+    "test": "node --test test/*.test.mjs",
+    "test:visual": "python3 -m unittest discover -s test -p '*_test.py'",
+    "test:pack": "node scripts/test-pack.mjs"
+  },
+  "peerDependencies": {
+    "@earendil-works/pi-coding-agent": "^0.85.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/apetersson/pi-video.git"
+  },
+  "homepage": "https://github.com/apetersson/pi-video#readme",
+  "files": [
+    "index.ts",
+    "core.mjs",
+    "capabilities.mjs",
+    "ffmpeg.mjs",
+    "README.md",
+    "attachments.mjs",
+    "LICENSE"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "pi-package",
+    "video",
+    "multimodal"
+  ],
+  "engines": {
+    "node": ">=22.19.0"
+  }
+}
