@@ -1,6 +1,6 @@
 {
   "name": "pi-video",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "type": "module",
   "description": "Native video input for pi using the selected model and advertised capabilities",
   "pi": {
