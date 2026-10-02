@@ -14,7 +14,7 @@
     "test:pack": "node scripts/test-pack.mjs"
   },
   "peerDependencies": {
-    "@earendil-works/pi-coding-agent": "^0.85.0"
+    "@earendil-works/pi-coding-agent": "^1.0.0"
   },
   "repository": {
     "type": "git",

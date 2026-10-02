@@ -1,3 +1,20 @@
+# Pi 1.0 validation — 2026-10-02
+
+Compatibility target: **pi 1.x**, tested against **pi 1.0.0**. Publication has not been performed.
+
+- `npm test`: **20 passed** on Node 24.14.0.
+- `npm run test:visual`: **5 passed**.
+- `npm run test:pack`: clean registry installation into an empty host, with lifecycle scripts disabled.
+- Packed serializer checks: **4 passed** on Node 24.14.0 and Node 22.23.2.
+- Packed CLI/extension checks: **5 passed** on both runtimes, including null header deletion during authenticated capability discovery.
+- All four maintained extensions loaded together through the pi 1.0 CLI on both runtimes; beacon state and dynamic provider registration were checked.
+
+The migration test used a command-scoped `npm_config_min_release_age=0` to install the explicitly requested pi 1.0 release and its dependencies. Global npm configuration and the installed global pi were unchanged. Normal `test:pack` continues to respect npm release-age policy; `PI_VIDEO_TEST_PI_DIR` remains available for an already installed runtime with its dependencies.
+
+These checks use mocked capability responses and video bytes and perform no inference. The live inference evidence below is historical and was not repeated against pi 1.0. Linux, Windows, and the exact minimum Node 22.19.0 runtime were not exercised.
+
+---
+
 # Validation — 2026-09-07
 
 Release candidate: **pi-video 0.1.0**, MIT. Publication has not been performed.

@@ -4,7 +4,7 @@ Read a video file in pi and let the **currently selected model** see it. The ext
 
 ## Install
 
-Requires Node.js 22.19.0 or newer, pi 0.85.x, and ffmpeg. The npm peer range is `^0.85.0`; other pi versions have not been validated.
+Requires Node.js 22.19.0 or newer, pi 1.x, and ffmpeg. The npm peer range is `^1.0.0`; Validated against pi 1.0.0.
 
 This is a release candidate. The GitHub and npm commands below become usable after their respective publications.
 
@@ -87,9 +87,9 @@ zsh scripts/download-fixture.sh
 PI_VIDEO_TEST_BASE_URL="https://your-server.example/v1" zsh scripts/e2e.sh
 ```
 
-Run these commands from a source checkout; test scripts are not shipped in the npm tarball. `test:pack` creates the exact tarball, installs it into a fresh temporary npm host, and loads its TypeScript entry through pi 0.85.0. It tests real provider serializers, tool delegation, replay, model switches, and omission paths using mocked capability responses and cached video bytes. It performs no inference. Set `PI_VIDEO_TEST_NODE` to an additional Node executable to repeat the packed serializer and CLI checks on that runtime. Tarballs and reports are saved under `runs/release/` (override with `PI_VIDEO_PACK_DIR`).
+Run these commands from a source checkout; test scripts are not shipped in the npm tarball. `test:pack` creates the exact tarball, installs it into a fresh temporary npm host, and loads its TypeScript entry through pi 1.0.0. It tests real provider serializers, tool delegation, replay, model switches, and omission paths using mocked capability responses and cached video bytes. It performs no inference. Set `PI_VIDEO_TEST_NODE` to an additional Node executable to repeat the packed serializer and CLI checks on that runtime. Tarballs and reports are saved under `runs/release/` (override with `PI_VIDEO_PACK_DIR`).
 
-The pack test respects npm configuration, including minimum release age. If that policy excludes pi 0.85.0 and you already have that runtime installed, set `PI_VIDEO_TEST_PI_DIR=/path/to/installed/pi-coding-agent` when running `npm run test:pack`. The script copies that runtime and its installed dependencies into a temporary bundled archive and installs both archives offline into the fresh host. It does not modify the installed runtime or npm policy. The report distinguishes this test from a registry installation.
+The pack test respects npm configuration, including minimum release age. If that policy excludes pi 1.0.0 and you already have that runtime installed, set `PI_VIDEO_TEST_PI_DIR=/path/to/installed/pi-coding-agent` when running `npm run test:pack`. The script copies that runtime and its installed dependencies into a temporary bundled archive and installs both archives offline into the fresh host. It does not modify the installed runtime or npm policy. The report distinguishes this test from a registry installation.
 
 The e2e test uses the real pi CLI with an isolated profile, selects a model from the supplied test endpoint (override with `PI_VIDEO_TEST_MODEL`), and verifies a video-aware read, native payload, and absence of temporary markers. `PI_VIDEO_TEST_API_KEY` supplies test authentication if needed. Test-only environment variables do not configure the extension's runtime endpoint. Test logs and fixtures are excluded from npm distribution.
 

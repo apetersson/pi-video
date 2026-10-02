@@ -21,12 +21,19 @@ export default function(pi: ExtensionAPI) {
     if (model.api !== 'openai-completions') return discoverVideo(model);
     const auth = await ctx.modelRegistry.getApiKeyAndHeaders(model);
     const headers = new Headers();
+    const deletedHeaders = new Set<string>();
     for (const source of [model.headers, auth.ok ? auth.headers : undefined]) {
       for (const [key, value] of Object.entries(source || {})) {
-        if (typeof value === 'string') headers.set(key, value);
+        if (value === null) {
+          headers.delete(key);
+          deletedHeaders.add(key.toLowerCase());
+        } else if (typeof value === 'string') {
+          headers.set(key, value);
+          deletedHeaders.delete(key.toLowerCase());
+        }
       }
     }
-    if (auth.ok && auth.apiKey && !headers.has('Authorization')) headers.set('Authorization', `Bearer ${auth.apiKey}`);
+    if (auth.ok && auth.apiKey && !headers.has('Authorization') && !deletedHeaders.has('authorization')) headers.set('Authorization', `Bearer ${auth.apiKey}`);
     const active = {...model, baseUrl: auth.ok && auth.baseUrl ? auth.baseUrl : model.baseUrl};
     return discoverVideo(active, {fetchJson: async (url: string) => {
       const response = await fetch(url, {headers, redirect: 'error', signal: AbortSignal.timeout(5000)});

@@ -10,7 +10,7 @@ import {createHash} from 'node:crypto';
 const exec = promisify(execFile);
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const manifest = JSON.parse(await readFile(join(root, 'package.json'), 'utf8'));
-const testedPiVersion = '0.85.0';
+const testedPiVersion = '1.0.0';
 // An already installed runtime can be repacked locally when npm release-age
 // policy excludes the tested version. Never disable that policy in this script.
 let piSource = `@earendil-works/pi-coding-agent@${testedPiVersion}`;
@@ -87,7 +87,7 @@ try {
     assert.ok(!cliSmoke.stdout.includes('"type":"agent_start"'), 'Smoke prompt unexpectedly started inference');
     const hookReport = JSON.parse(await readFile(env.PI_VIDEO_HOOK_REPORT, 'utf8'));
     await writeFile(join(archiveDir, `hook-report${suffix}.json`), JSON.stringify(hookReport, null, 2) + '\n');
-    assert.equal(hookReport.tests, 4, JSON.stringify(hookReport));
+    assert.equal(hookReport.tests, 5, JSON.stringify(hookReport));
     assert.equal(hookReport.passed, hookReport.tests, JSON.stringify(hookReport));
     console.log(`PASS: ${hookReport.passed} packed extension checks through the bundled pi CLI`);
     testedNodes.push(nodeVersion);

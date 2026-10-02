@@ -50,7 +50,7 @@ export async function runHookTests(videoExtension) {
   }
 
 async function harness(t) {
-  assert.equal(JSON.parse(await readFile(join(piRoot,'package.json'),'utf8')).version,'0.85.0');
+  assert.equal(JSON.parse(await readFile(join(piRoot,'package.json'),'utf8')).version,'1.0.0');
   const extension={handlers:new Map(),tools:new Map()};
   videoExtension({
     on(name, handler) { const handlers=extension.handlers.get(name)||[]; handlers.push(handler); extension.handlers.set(name,handlers); },
@@ -126,6 +126,25 @@ await test('loaded hooks use selected auth endpoint, replay after agent_end, and
   assert.equal(calls.length,callsBefore);assert.ok(JSON.stringify(output).includes('omitted'));noMarker(output);
   await runner.emit({type:'session_shutdown'});
   output=await runner.emitBeforeProviderRequest(serialize(marked));assert.equal(videos(output).length,0);noMarker(output);
+});
+
+await test('capability discovery honors null auth headers without restoring model headers or bearer credentials',async t=>{
+  const {runner,registry,setModel}=await harness(t),video=await cachedVideo(t);
+  setModel({...model,headers:{Authorization:'stale-secret','X-Remove':'stale','X-Keep':'kept'}});
+  registry.getApiKeyAndHeaders=async()=>({ok:true,apiKey:'placeholder',headers:{authorization:null,'x-remove':null,'X-Test':'resolved'}});
+  let requests=0;
+  t.mock.method(globalThis,'fetch',async(_url,options)=>{
+    requests++;
+    assert.equal(options.headers.has('Authorization'),false);
+    assert.equal(options.headers.has('X-Remove'),false);
+    assert.equal(options.headers.get('X-Keep'),'kept');
+    assert.equal(options.headers.get('X-Test'),'resolved');
+    return {ok:true,json:async()=>({data:[{id:model.id,input:['video']}]})};
+  });
+  const marked=await runner.emitContext(history(['call_123|fc_456'],[video.reference]));
+  const output=await runner.emitBeforeProviderRequest(serialize(marked));
+  assert.ok(requests>0);
+  assert.equal(videos(output).length,1);noMarker(output);
 });
 
 await test('loaded request hook converts changed/missing files, ffmpeg and auth failures into clean omissions',async t=>{
